@@ -6,15 +6,17 @@ namespace MyFps
     public class DoorCellOpen : MonoBehaviour
     {
         #region Variables
+        //ActionUI
         public GameObject actionUI;
         public TextMeshProUGUI actionTextUI;
+        public GameObject extraCross;
+        [SerializeField] private string action = "Open The Door";
 
         //Action
         private Animator animator;
-        private Collider collider;
+        private Collider m_Collider;
         public AudioSource audioSource;
 
-        [SerializeField] private string action= "Open The Door";
         private float theDistance;
 
         #endregion
@@ -22,7 +24,7 @@ namespace MyFps
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            collider = GetComponent<BoxCollider>();
+            m_Collider = GetComponent<BoxCollider>();
         }
 
         private void Update()
@@ -34,8 +36,7 @@ namespace MyFps
         {
             if (theDistance <= 2f)
             {
-                actionTextUI.text = action;
-                actionUI.SetActive(true);
+                ShowActionUI();
                 if (Input.GetButtonDown("Action"))
                 {
                     OpenDoor();
@@ -52,19 +53,27 @@ namespace MyFps
         //마우스가 벗어나면 액션 UI를 숨긴다
         private void OnMouseExit()
         {
-            actionUI.SetActive(false);
+            HideActionUI();
         }
 
         void OpenDoor()
         {
             animator.SetBool("IsOpen", true);
-            collider.enabled = false;
+            m_Collider.enabled = false;
         }
 
         void HideActionUI()
         {
             actionUI.SetActive(false);
             actionTextUI.text = "";
+            extraCross.SetActive(false);
+        }
+
+        void ShowActionUI()
+        {
+            actionTextUI.text = action;
+            actionUI.SetActive(true);
+            extraCross.SetActive(true);
         }
     }
 }
