@@ -6,7 +6,7 @@ namespace MySample
     {
         #region Variables
         Animator animator;
-        string name = "MoveState";
+        string moveName = "MoveState";
         [SerializeField] float moveSpeed = 5.0f;
 
         //입력값
@@ -39,27 +39,27 @@ namespace MySample
             if (moveX == 0f && moveY == 0f)
             {
                 //대기
-                animator.SetInteger(name, 0);
+                animator.SetInteger(moveName, 0);
             }
             else if (moveY > 0f)
             {
                 //앞방향
-                animator.SetInteger(name, 1);
+                animator.SetInteger(moveName, 1);
             }
             else if (moveY < 0f)
             {
                 //뒤방향
-                animator.SetInteger(name, 2);
+                animator.SetInteger(moveName, 2);
             }
             else if (moveX < 0f)
             {
                 //왼쪽방향
-                animator.SetInteger(name, 3);
+                animator.SetInteger(moveName, 3);
             }
             else if (moveX > 0f)
             {
                 //오른쪽방향
-                animator.SetInteger(name, 4);
+                animator.SetInteger(moveName, 4);
             }
         }
 
