@@ -39,6 +39,9 @@ namespace MyFps
 
             //적등장 사운드
             jumpScare.Play();
+
+            //트리거 제거
+            Destroy(this.gameObject);
         }
     }
 }
