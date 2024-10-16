@@ -21,6 +21,7 @@ namespace MyFps
         #endregion
         private void Awake()
         {
+
             delayTime = setDelayTime;
         }
         private void Start()
@@ -30,6 +31,10 @@ namespace MyFps
 
         IEnumerator PlaySequence()
         {
+            //마우스 커서 상태 설정
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
             //0.플레이 캐릭터 비 활성화
             thePlayer.SetActive(false);
 
