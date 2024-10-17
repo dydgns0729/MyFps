@@ -21,6 +21,7 @@ namespace MyFps
         [SerializeField] private float fireDelay = 0.5f;
         private bool isFire;
 
+        public GameObject hitImpactPrefab;
         #endregion
         void Awake()
         {
@@ -34,8 +35,10 @@ namespace MyFps
             //슛
             if (Input.GetButtonDown("Fire") && !isFire)
             {
-                StartCoroutine(Shoot());
-
+                if (PlayerStats.Instance.UseAmmo(1))
+                {
+                    StartCoroutine(Shoot());
+                }
             }
         }
 
@@ -49,13 +52,19 @@ namespace MyFps
             RaycastHit hit;
             if (Physics.Raycast(camera.position, camera.TransformDirection(Vector3.forward), out hit, maxDistance))
             {
+                //Hit임팩트 효과
+                GameObject eff = Instantiate(hitImpactPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(eff, 2f);
+
                 //적에게 데미지를 준다
                 Debug.Log($"{hit.transform.name}에게 데미지를 준다");
-                RobotController robot = hit.transform.GetComponent<RobotController>();
-                if (robot != null)
+                IDamageable damageable = hit.transform.GetComponent<IDamageable>();
+                if (damageable != null)
                 {
-                    robot.TakeDamage(attackDamage);
+                    damageable.TakeDamage(attackDamage);
                 }
+
+
             }
             //슛효과 - VFX, SFX
             animator.SetTrigger("Fire");
