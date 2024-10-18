@@ -57,7 +57,7 @@ namespace MyFps
                 Destroy(eff, 2f);
 
                 //적에게 데미지를 준다
-                Debug.Log($"{hit.transform.name}에게 데미지를 준다");
+                //Debug.Log($"{hit.transform.name}에게 데미지를 준다");
                 IDamageable damageable = hit.transform.GetComponent<IDamageable>();
                 if (damageable != null)
                 {

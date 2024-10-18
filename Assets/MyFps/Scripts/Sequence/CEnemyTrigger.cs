@@ -11,7 +11,8 @@ namespace MyFps
 
         //오디오 재생
         public AudioSource doorBang;
-        public AudioSource jumpScare;
+        public AudioSource bgm01;//메인씬 1번 배경음
+        public AudioSource bgm02;//적 등장 배경음
 
         //Enemy(Robot) 활성화
         public GameObject theRobot;
@@ -29,7 +30,8 @@ namespace MyFps
             theDoor.GetComponent<Animator>().SetBool("IsOpen", true);
             theDoor.GetComponent<BoxCollider>().enabled = false;
 
-            //문열기 사운드
+            //문열기 사운드, 배경음 멈추기
+            bgm01.Stop();
             doorBang.Play();
 
             //Enemy 등장
@@ -38,7 +40,7 @@ namespace MyFps
             yield return new WaitForSeconds(1f);
 
             //적등장 사운드
-            jumpScare.Play();
+            bgm02.Play();
 
             RobotController robot = theRobot.transform.GetComponent<RobotController>();
             if (robot != null)

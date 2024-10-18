@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86;
 
 namespace MyFps
 {
@@ -18,6 +19,10 @@ namespace MyFps
         #region Variables
         public GameObject thePlayer;
         private Animator animator;
+
+        //로봇이 죽을시 배경음으로 돌아오게 만들기 위한 오디오 소스
+        public AudioSource bgm01;
+        public AudioSource bgm02;
 
         //로봇 상태
         private RobotState currentState;
@@ -129,6 +134,10 @@ namespace MyFps
         private void Die()
         {
             isDeath = true;
+
+            //로봇이 죽으면 등장음을 멈추고 배경음으로 돌아옴
+            bgm02.Stop();
+            bgm01.Play();
 
             Debug.Log("Robot Death");
             SetState(RobotState.R_Death);

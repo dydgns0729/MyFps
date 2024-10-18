@@ -6,7 +6,7 @@ namespace MyFps
     public class PlayerCasting : MonoBehaviour
     {
         #region Variables
-        public static float distanceFromTarget;
+        public static float distanceFromTarget = Mathf.Infinity;
         [SerializeField] private float toTarget;
         #endregion
 
