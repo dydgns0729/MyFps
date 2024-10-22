@@ -9,15 +9,25 @@ namespace MyFps
         #region Variables
         [SerializeField] string loadtoScene = "MainScene01";
         public SceneFader fader;
+
+        private AudioManager audioManager;
         #endregion
 
         private void Start()
         {
             fader.FromFade();
+
+            //참조
+            audioManager = AudioManager.Instance;
+
+            //BGM 플레이
+            audioManager.PlayBGM("MenuBGM");
         }
 
         public void NewGame()
         {
+            audioManager.Stop(audioManager.BgmSound);
+            audioManager.Play("MenuButton");
             fader.FadeTo(loadtoScene);
         }
 
@@ -29,6 +39,7 @@ namespace MyFps
         public void Options()
         {
             Debug.Log("Options");
+            audioManager.PlayBGM("PlayBGM");
         }
 
         public void Credits()
