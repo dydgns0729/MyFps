@@ -8,6 +8,9 @@ namespace MyFps
         #region Variables
         public GameObject pauseUI;
         private GameObject thePlayer;
+
+        public SceneFader fader;
+        [SerializeField] private string loadToScene = "MainMenu";
         #endregion
         private void Awake()
         {
@@ -46,7 +49,14 @@ namespace MyFps
         public void Menu()
         {
             Time.timeScale = 1f;
-            Debug.Log("Goto Menu");
+
+            //씬 종료 처리
+            AudioManager.Instance.StopBGM();
+
+            //메인메뉴로 이동
+            fader.FadeTo(loadToScene);
+
+            //Debug.Log("Goto Menu");
         }
     }
 }
