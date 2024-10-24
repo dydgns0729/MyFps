@@ -15,6 +15,9 @@ namespace MyFps
         [SerializeField] protected string action = "Input Message";
 
         protected float theDistance;
+
+        //true면 인터렉티브 비활성화
+        protected bool unInteractive = false;
         #endregion
 
         protected void Update()
@@ -24,7 +27,7 @@ namespace MyFps
 
         private void OnMouseOver()
         {
-            if (theDistance <= 2f)
+            if (theDistance <= 2f && !unInteractive)
             {
                 ShowActionUI();
 
