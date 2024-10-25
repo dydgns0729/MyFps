@@ -6,6 +6,7 @@ namespace MyFps
     public enum PuzzleKey
     {
         ROOM01_KEY,
+        LEFTEYE_KEY,
         MAX_KEY             //퍼즐 아이템 개수
     }
     //플레이어의 속성이나 데이터값을 관리하는 싱글톤(SingleTon)[DontDestroy]클래스 ammoCount
