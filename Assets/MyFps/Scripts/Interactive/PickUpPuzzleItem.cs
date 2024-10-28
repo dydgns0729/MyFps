@@ -21,6 +21,9 @@ namespace MyFps
 
         public Sprite itemSprite;                           //획득한 아이템 아이콘 이미지
         [SerializeField] string puzzleStr = "Puzzle Text";  //획득한 아이템 안내문구
+
+        public GameObject fakeWall;
+        public GameObject exitWall;
         #endregion
 
         protected override void DoAction()
@@ -47,9 +50,18 @@ namespace MyFps
                 puzzleUI.SetActive(false);
 
             }
-
+            ShowExitWall();
             //키를 얻으면 오브젝트 파괴
             Destroy(gameObject);
         }
+        void ShowExitWall()
+        {
+            if (PlayerStats.Instance.HasPuzzleItem(PuzzleKey.LEFTEYE_KEY) && PlayerStats.Instance.HasPuzzleItem(PuzzleKey.RIGHTEYE_KEY))
+            {
+                fakeWall.SetActive(false);
+                exitWall.SetActive(true);
+            }
+        }
+
     }
 }
