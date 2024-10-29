@@ -34,6 +34,8 @@ namespace MyFps
         IEnumerator GainPuzzleItem()
         {
             PlayerStats.Instance.AcquirePuzzleItem(puzzleKey);
+            ShowExitWall();
+
             //UI 연출
             if (puzzleUI != null)
             {
@@ -50,7 +52,7 @@ namespace MyFps
                 puzzleUI.SetActive(false);
 
             }
-            ShowExitWall();
+            
             //키를 얻으면 오브젝트 파괴
             Destroy(gameObject);
         }

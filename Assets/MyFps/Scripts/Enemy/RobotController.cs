@@ -77,7 +77,7 @@ namespace MyFps
                     transform.LookAt(thePlayer.transform);
                     break;
                 case RobotState.R_Attack:       //플레이어를 향해 공격한다
-                    if (distance > attackDamage)
+                    if (distance > attackRange)
                     {
                         SetState(RobotState.R_Walk);
                     }
@@ -98,10 +98,10 @@ namespace MyFps
 
         private void Attack()
         {
-            PlayerController player = thePlayer.GetComponent<PlayerController>();
-            if (player != null)
+            IDamageable damageable = thePlayer.GetComponent<IDamageable>();
+            if (damageable != null)
             {
-                player.TakeDamage(attackDamage);
+                damageable.TakeDamage(attackDamage);
             }
         }
 
