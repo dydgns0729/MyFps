@@ -43,6 +43,8 @@ namespace MyFps
         private int nowWayPoint;
 
         private Vector3 startPosition;  //시작위치, 타겟을 잃어버렸을때 돌아갈 위치
+
+        private float detectingRange = 20f;
         #endregion
 
         private void Awake()
@@ -79,6 +81,16 @@ namespace MyFps
             //방향 구하기(타겟 지정)
             Vector3 dir = thePlayer.transform.position - this.transform.position;
             float distance = Vector3.Distance(thePlayer.transform.position, transform.position);
+
+            if (detectingRange >= distance)
+            {
+                SetState(EnemyState.E_Chase);
+            }
+            else
+            {
+                SetState(EnemyState.E_Walk);
+            }
+
             if (distance <= attackRange)
             {
                 SetState(EnemyState.E_Attack);
@@ -139,7 +151,7 @@ namespace MyFps
             //상태변경
             currentState = newState;
             //상태변경에 따른 구현 내용
-            if (currentState == EnemyState.E_Chase)
+            if (currentState == EnemyState.E_Chase && !isDeath)
             {
                 animator.SetInteger("EnemyState", 1);
                 animator.SetLayerWeight(1, 1f);
@@ -173,6 +185,7 @@ namespace MyFps
 
             //죽었을때 충돌체 제거
             transform.GetComponent<BoxCollider>().enabled = false;
+            Destroy(gameObject, 3f);
         }
 
         //다음 웨이포인트로 이동
@@ -186,5 +199,18 @@ namespace MyFps
             agent.SetDestination(wayPoints[nowWayPoint].position);
         }
 
+        //제자리로 돌아가기
+        public void GoStartPosition()
+        {
+            if (isDeath) return;
+            SetState(EnemyState.E_Walk);
+            nowWayPoint = 0;
+            agent.SetDestination(startPosition);
+        }
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, detectingRange);
+        }
     }
 }
