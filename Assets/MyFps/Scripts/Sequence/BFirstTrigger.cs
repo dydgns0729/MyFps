@@ -1,16 +1,21 @@
+using StarterAssets;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using StarterAssets;
+
 namespace MyFps
 {
     public class BFirstTrigger : MonoBehaviour
     {
         #region Variables
-        public TextMeshProUGUI textBox;
         public GameObject thePlayer;
-        public GameObject arrowObject;
-        [SerializeField] string sequence = "Looks like a weapon on that table";
+        public GameObject theArrow;
+
+        //sequence UI
+        public TextMeshProUGUI textBox;
+        [SerializeField]
+        private string sequence = "Looks like a weapon on that table";
 
         public AudioSource line03;
         #endregion
@@ -20,34 +25,36 @@ namespace MyFps
             StartCoroutine(PlaySequence());
         }
 
+        //트리거 작동시 플레이
         IEnumerator PlaySequence()
         {
-
-
-            //플레이어 캐릭터 비활성화
+            //플레이 캐릭터 비활성화(플레이 멈춤)
             thePlayer.GetComponent<FirstPersonController>().enabled = false;
-            //thePlayer.SetActive(false);
-            //대사 출력
+
+            //대사 출력: "Looks like a weapon on that table.", 음성 출력
+            textBox.gameObject.SetActive(true);
             textBox.text = sequence;
             line03.Play();
 
-            textBox.gameObject.SetActive(true);
-            //1초 대기
+            //1초 딜레이
             yield return new WaitForSeconds(2f);
-            //화살표 표시
-            arrowObject.SetActive(true);
-            //1초 대기
+
+            //화살표 활성화
+            theArrow.SetActive(true);
+
+            //1초 딜레이
             yield return new WaitForSeconds(1f);
-            //대사 초기화 및 없애기
+
+            //초기화
             textBox.text = "";
             textBox.gameObject.SetActive(false);
-            //플레이어 캐릭터 활성화
-            thePlayer.GetComponent<FirstPersonController>().enabled = true;
-            //thePlayer.SetActive(true);
 
-            //트리거 비활성화(킬)
+            //플레이 캐릭터 활성화(다시 플레이)
+            thePlayer.GetComponent<FirstPersonController>().enabled = true;
+
+            //트리거 충돌체 비활성화 - 킬
             Destroy(gameObject);
-            //this.transform.GetComponent<BoxCollider>().enabled = false;
+            //transform.GetComponent<BoxCollider>().enabled = false;
         }
     }
 }

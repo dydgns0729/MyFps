@@ -4,28 +4,25 @@ using UnityEngine.Audio;
 namespace MyFps
 {
     //오디오를 관리하는 클래스
-    public class AudioManager : PersistentSingleton<AudioManager>
+    public class AudioManager : Singleton<AudioManager>
     {
         #region Variables
         public Sound[] sounds;
-
-        public AudioMixer audioMixer;
-
-        private string bgmSound = "";       //현재 플레이 되는 배경음 이름 확인용 
+        private string bgmSound = "";       //현재 플레이 되는 배경음 이름
         public string BgmSound
         {
-
             get { return bgmSound; }
         }
 
+        public AudioMixer audioMixer;
         #endregion
 
         protected override void Awake()
         {
-            //Singleton 구현부
+            //Singletone 구현부
             base.Awake();
 
-            //AudioMixer
+            //AudioMixer 그룹 찾아오기
             AudioMixerGroup[] audioMixerGroups = audioMixer.FindMatchingGroups("Master");
 
             //AudioManager 초기화
@@ -37,15 +34,14 @@ namespace MyFps
                 sound.source.volume = sound.volume;
                 sound.source.pitch = sound.pitch;
                 sound.source.loop = sound.loop;
-                if (sound.loop)
+
+                if(sound.loop)
                 {
-                    //BGM
-                    sound.source.outputAudioMixerGroup = audioMixerGroups[1];
+                    sound.source.outputAudioMixerGroup = audioMixerGroups[1];   //BGM
                 }
                 else
                 {
-                    //SFX
-                    sound.source.outputAudioMixerGroup = audioMixerGroups[2];
+                    sound.source.outputAudioMixerGroup = audioMixerGroups[2];   //SFX
                 }
             }
         }
@@ -54,10 +50,10 @@ namespace MyFps
         {
             Sound sound = null;
 
-            //매개변수의 이름과 같은 클립 찾기
+            //매개변수 이름과 같은 클립 찾기
             foreach (var s in sounds)
             {
-                if (s.clipName == name)
+                if (s.name == name)
                 {
                     sound = s;
                     break;
@@ -67,7 +63,7 @@ namespace MyFps
             //매개변수 이름과 같은 클립이 없으면
             if (sound == null)
             {
-                Debug.Log($"Cannot Find {name}");
+                //Debug.Log($"Cannot Find {name}");
                 return;
             }
 
@@ -78,15 +74,15 @@ namespace MyFps
         {
             Sound sound = null;
 
-            //매개변수의 이름과 같은 클립 찾기
+            //매개변수 이름과 같은 클립 찾기
             foreach (var s in sounds)
             {
-                if (s.clipName == name)
+                if (s.name == name)
                 {
                     sound = s;
 
                     //
-                    if (s.clipName == bgmSound)
+                    if (s.name == bgmSound)
                     {
                         bgmSound = "";
                     }
@@ -97,19 +93,15 @@ namespace MyFps
             //매개변수 이름과 같은 클립이 없으면
             if (sound == null)
             {
-                Debug.Log($"Cannot Find {name}");
+                //Debug.Log($"Cannot Find {name}");
                 return;
-            }
-            else
-            {
-                Debug.Log($"{name} stop");
             }
 
             sound.source.Stop();
         }
 
         //배경음 재생
-        public void PlayBGM(string name)
+        public void PlayBgm(string name)
         {
             //배경음 이름 체크
             if (bgmSound == name)
@@ -117,33 +109,34 @@ namespace MyFps
                 return;
             }
 
-            //기존에 재생되던 BGM 정지
-            Stop(bgmSound);
+            //배경음 정지
+            StopBgm();
 
             Sound sound = null;
 
             foreach (var s in sounds)
             {
-                if (s.clipName == name)
+                if (s.name == name)
                 {
-                    bgmSound = s.clipName;
+                    bgmSound = s.name;
                     sound = s;
                     break;
                 }
             }
 
+            //매개변수 이름과 같은 클립이 없으면
             if (sound == null)
             {
-                Debug.Log($"Cannot Find {name}");
+                //Debug.Log($"Cannot Find {name}");
                 return;
             }
 
             sound.source.Play();
         }
-        public void StopBGM()
+
+        public void StopBgm()
         {
             Stop(bgmSound);
-        }
-
+        } 
     }
 }

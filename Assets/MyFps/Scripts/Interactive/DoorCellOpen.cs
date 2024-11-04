@@ -1,18 +1,18 @@
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 namespace MyFps
 {
     public class DoorCellOpen : Interactive
     {
         #region Variables
-        //Action
+        //action
         private Animator animator;
         private Collider m_Collider;
         public AudioSource audioSource;
         #endregion
 
-        private void Awake()
+        private void Start()
         {
             animator = GetComponent<Animator>();
             m_Collider = GetComponent<BoxCollider>();
@@ -24,6 +24,5 @@ namespace MyFps
             m_Collider.enabled = false;
             audioSource.Play();
         }
-
     }
 }

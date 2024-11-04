@@ -1,6 +1,7 @@
-using TMPro;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 namespace MyFps
 {
@@ -8,8 +9,10 @@ namespace MyFps
     {
         #region Variables
         public TextMeshProUGUI textBox;
-        [SerializeField] private string sequence = "You need the Key";
+        [SerializeField]
+        private string sequence = "You need the Key";
         #endregion
+
         protected override void DoAction()
         {
             //문열기
@@ -23,28 +26,31 @@ namespace MyFps
             }
         }
 
-        private IEnumerator LockedDoor()
+        void OpenDoor()
         {
+            this.GetComponent<BoxCollider>().enabled = false;
+
+            this.GetComponent<Animator>().SetBool("IsOpen", true);
+            AudioManager.Instance.Play("DoorOpen");
+        }
+
+        IEnumerator LockedDoor()
+        {
+            //문 잠긴 소리
+            unInteractive = true;   //인터랙티브 기능 정지
             AudioManager.Instance.Play("DoorLocked");
-            unInteractive = true;
-            //this.GetComponent<BoxCollider>().enabled = false;
+
+            yield return new WaitForSeconds(1f);
 
             textBox.gameObject.SetActive(true);
             textBox.text = sequence;
-            
+
             yield return new WaitForSeconds(2f);
-            unInteractive = false;
-            //this.GetComponent<BoxCollider>().enabled = true;
+            
             textBox.gameObject.SetActive(false);
             textBox.text = "";
-        }
 
-        //문열기
-        void OpenDoor()
-        {
-            this.GetComponent<Animator>().SetBool("IsOpen", true);
-            AudioManager.Instance.Play("DoorOpen");
-            this.GetComponent<BoxCollider>().enabled = false;
+            unInteractive = false;   //인터랙티브 기능 복원
         }
     }
 }

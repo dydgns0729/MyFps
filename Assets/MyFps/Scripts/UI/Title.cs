@@ -10,8 +10,8 @@ namespace MyFps
         public SceneFader fader;
         [SerializeField] private string loadToScene = "MainMenu";
 
-        private bool isAnyKey;
-        public GameObject anykeyText;
+        private bool isAnyKey = false;
+        public GameObject anykeyUI;
         #endregion
 
         private void Start()
@@ -19,6 +19,7 @@ namespace MyFps
             //페이드인 효과
             fader.FromFade();
 
+            //초기화
             isAnyKey = false;
 
             StartCoroutine(TitleProcess());
@@ -26,28 +27,29 @@ namespace MyFps
 
         private void Update()
         {
-            if (Input.anyKey && isAnyKey)
+            if(Input.anyKey && isAnyKey)
             {
                 GotoMenu();
             }
         }
+
+        //3초뒤에 anykey Show, 10초 뒤에 자동 넘김
+        IEnumerator TitleProcess()
+        {
+            yield return new WaitForSeconds(4f);
+            isAnyKey = true;
+            anykeyUI.SetActive(true);
+
+            yield return new WaitForSeconds(10f);
+            GotoMenu();
+        }
+
 
         private void GotoMenu()
         {
             StopAllCoroutines();
 
             fader.FadeTo(loadToScene);
-        }
-
-        //3초뒤에 anykey 활성화, 10초 뒤에 씬 전환
-        IEnumerator TitleProcess()
-        {
-            yield return new WaitForSeconds(3f);
-            anykeyText.SetActive(true);
-            isAnyKey=true;
-
-            yield return new WaitForSeconds(7f);
-            GotoMenu();
         }
     }
 }

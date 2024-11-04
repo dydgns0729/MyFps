@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8245247103707201229}
   - component: {fileID: 8245247103710625517}
   - component: {fileID: 8245247103709494317}
-  - component: {fileID: 4898176373317530768}
-  - component: {fileID: 1386583674863882699}
-  - component: {fileID: 8277920905906718220}
-  - component: {fileID: 4688690093258363756}
+  - component: {fileID: 2264666526042671664}
+  - component: {fileID: 3138790111391812847}
+  - component: {fileID: 2065563493071007458}
+  - component: {fileID: 5411503605082495907}
   m_Layer: 0
   m_Name: Asteroid3
   m_TagString: Untagged
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4898176373317530768
+--- !u!135 &2264666526042671664
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,9 +106,9 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.33502066
-  m_Center: {x: -0.03134402, y: 0.008581956, z: 0.0004077355}
---- !u!54 &1386583674863882699
+  m_Radius: 0.34
+  m_Center: {x: -0.031343997, y: 0.008581968, z: -0.017354105}
+--- !u!54 &3138790111391812847
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,7 +135,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!82 &8277920905906718220
+--- !u!82 &2065563493071007458
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -231,7 +231,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4688690093258363756
+--- !u!114 &5411503605082495907
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -240,10 +240,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8245247103707554541}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91c1aaae0dde9124ea612cfaeedae266, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b2ab891f04813c46950b85ea20ed7fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: 7538c4d3c863f724ab4c56a70c6bb913, type: 3}
+  clip: {fileID: 8300000, guid: 732a5fe3d77fc68489718e5e5fe61f0b, type: 3}
   volume: 1
   pitch: 1
   loop: 1

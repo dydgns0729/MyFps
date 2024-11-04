@@ -1,29 +1,25 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace MyFps
 {
-    public class PickUpPuzzleItem : Interactive
+    public class PickupPuzzleItem : Interactive
     {
         #region Variables
-
         [SerializeField] private PuzzleKey puzzleKey;
 
-        //퍼즐 UI
+        //퍼즐UI
         public GameObject puzzleUI;
         public Image itemImage;
-        public TextMeshProUGUI itemText;
+        public TextMeshProUGUI puzzleText;
 
         public GameObject puzzleItemGp;
 
-
-        public Sprite itemSprite;                           //획득한 아이템 아이콘 이미지
-        [SerializeField] string puzzleStr = "Puzzle Text";  //획득한 아이템 안내문구
-
-        public GameObject fakeWall;
-        public GameObject exitWall;
+        public Sprite itemSprite;                                   //획득한 아이템 아이콘
+        [SerializeField] private string puzzleStr = "Puzzle Text";  //아이템 획득 안내 텍스트
         #endregion
 
         protected override void DoAction()
@@ -31,39 +27,28 @@ namespace MyFps
             StartCoroutine(GainPuzzleItem());
         }
 
-        IEnumerator GainPuzzleItem()
+        protected IEnumerator GainPuzzleItem()
         {
+            //puzzleKey 퍼즐 아이템 획득
             PlayerStats.Instance.AcquirePuzzleItem(puzzleKey);
-            ShowExitWall();
 
-            //UI 연출
+            //UI연출
             if (puzzleUI != null)
             {
-                //아이템 트리거 비활성화
-                puzzleItemGp.SetActive(false);
+                //아이템 트리거 비활성
                 this.GetComponent<BoxCollider>().enabled = false;
+                puzzleItemGp.SetActive(false);
 
-                itemImage.sprite = itemSprite;
-                itemText.text = puzzleStr;
                 puzzleUI.SetActive(true);
+                itemImage.sprite = itemSprite;
+                puzzleText.text = puzzleStr;
 
                 yield return new WaitForSeconds(2f);
-
                 puzzleUI.SetActive(false);
-
             }
-            
-            //키를 얻으면 오브젝트 파괴
+
+            //아이템 트리거 킬
             Destroy(gameObject);
         }
-        void ShowExitWall()
-        {
-            if (PlayerStats.Instance.HasPuzzleItem(PuzzleKey.LEFTEYE_KEY) && PlayerStats.Instance.HasPuzzleItem(PuzzleKey.RIGHTEYE_KEY))
-            {
-                fakeWall.SetActive(false);
-                exitWall.SetActive(true);
-            }
-        }
-
     }
 }

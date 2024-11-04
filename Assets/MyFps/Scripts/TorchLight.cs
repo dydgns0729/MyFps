@@ -1,58 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 
-namespace MyFps
+namespace MySample
 {
     public class TorchLight : MonoBehaviour
     {
         #region Variables
-
         public Transform torchLight;
         private Animator animator;
-        [SerializeField] private float countdown;
-        [SerializeField] private float setTimer = 1f;
 
-        private int lightMode;
+        private int lightMode = 0;
         #endregion
+
         // Start is called before the first frame update
         void Start()
         {
             animator = torchLight.GetComponent<Animator>();
-            countdown = setTimer;
-            InvokeRepeating("LightAnimation", 1f, countdown);
-            //lightMode = 0;
+            lightMode = 0;
+
+            InvokeRepeating("LightAnimation", 0f, 1f);
         }
 
         // Update is called once per frame
         void Update()
         {
-            //if ((lightMode==0))
-            //{
-                //StartCoroutine(FlameAnimation());
-            //}
-
-            //Debug.Log(Random.Range(1, 4));
-            //if (countdown <= 0f)
-            //{
-            //    animator.SetInteger("LightMode", Random.Range(1, 4));
-            //    countdown = setTimer;
-            //}
-            //countdown -= Time.deltaTime;
+            //1초마다 1번씩 랜덤한 라이트 애니메이션을  플레이
+            /*if (lightMode == 0)
+            {
+                StartCoroutine(FlameAnimation());
+            }*/
         }
 
-        void LightAnimation()
+        IEnumerator FlameAnimation()
         {
-            animator.SetInteger("LightMode", Random.Range(1, 4));
+            lightMode = Random.Range(1, 4);
+            animator.SetInteger("LightMode", lightMode);
+
+            yield return new WaitForSeconds(1f);
+            lightMode = 0;
         }
 
-        //IEnumerator FlameAnimation()
-        //{
-        //    animator.SetInteger("LightMode", Random.Range(1, 4));
-        //    yield return new WaitForSeconds(countdown);
-        //  lightMode=0;
-        //}
-
+        //반복 함수
+        private void LightAnimation()
+        {
+            lightMode = Random.Range(1, 4);
+            animator.SetInteger("LightMode", lightMode);
+        }
     }
 }

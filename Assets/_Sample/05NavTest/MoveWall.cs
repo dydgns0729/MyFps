@@ -1,16 +1,16 @@
 using UnityEngine;
 
-namespace MySample
+namespace Sample
 {
     public class MoveWall : MonoBehaviour
     {
         #region Variables
-        [SerializeField]private float moveSpeed = 5f;
+        [SerializeField] private float moveSpeed = 1f;
 
         [SerializeField] private float moveTime = 1f;
         private float countdown = 0f;
 
-        //이동방향 좌/우
+        //이동뱡항 좌/우
         [SerializeField] private float dir = 1f;
         #endregion
 
@@ -20,12 +20,12 @@ namespace MySample
             countdown = moveTime;
         }
 
-        void Update()
+        private void Update()
         {
-            //좌우이동 타이머 설정
+            //좌우 이동 타이머
             if(countdown <= 0f)
             {
-                //타이머 액션 - 방향 전환
+                //타이머 액션 - 방향전환
                 dir *= -1;
 
                 //초기화
@@ -33,8 +33,8 @@ namespace MySample
             }
             countdown -= Time.deltaTime;
 
-            transform.Translate(Vector3.right * dir * moveSpeed * Time.deltaTime,Space.World);
-
+            transform.Translate(Vector3.right * dir * moveSpeed * Time.deltaTime, Space.World);
         }
+
     }
 }

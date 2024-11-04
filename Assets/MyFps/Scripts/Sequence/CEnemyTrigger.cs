@@ -1,21 +1,20 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using static Unity.Burst.Intrinsics.X86;
 
 namespace MyFps
 {
     public class CEnemyTrigger : MonoBehaviour
     {
         #region Variables
-        //문열기
-        public GameObject theDoor;
+        public GameObject theDoor;      //문
+        public AudioSource doorBang;    //문 열기 사운드
 
-        //오디오 재생
-        public AudioSource doorBang;
-        public AudioSource bgm01;//메인씬 1번 배경음
-        public AudioSource bgm02;//적 등장 배경음
+        public AudioSource bgm01;   //메인씬 1 배경음
+        public AudioSource bgm02;   //적 등장 배경음        
 
-        //Enemy(Robot) 활성화
-        public GameObject theRobot;
+        public GameObject theRobot;     //적
         #endregion
 
         private void OnTriggerEnter(Collider other)
@@ -30,25 +29,26 @@ namespace MyFps
             theDoor.GetComponent<Animator>().SetBool("IsOpen", true);
             theDoor.GetComponent<BoxCollider>().enabled = false;
 
-            //문열기 사운드, 배경음 멈추기
+            //문 사운드
             bgm01.Stop();
             doorBang.Play();
 
-            //Enemy 등장
+            //Enemy 활성화
             theRobot.SetActive(true);
 
             yield return new WaitForSeconds(1f);
 
-            //적등장 사운드
+            //Enemy 등장 사운드
             bgm02.Play();
 
-            RobotController robot = theRobot.transform.GetComponent<RobotController>();
+            //Enemy 타겟을 향해 걷기
+            RobotController robot = theRobot.GetComponent<RobotController>();
             if (robot != null)
             {
                 robot.SetState(RobotState.R_Walk);
             }
 
-            //트리거 제거
+            //트리거 킬
             Destroy(this.gameObject);
         }
     }

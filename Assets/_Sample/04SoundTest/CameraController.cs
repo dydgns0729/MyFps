@@ -6,13 +6,12 @@ namespace MySample
     {
         #region Variables
         public Transform thePlayer;
-        [SerializeField] private Vector3 offset = Vector3.zero;
+        [SerializeField] private Vector3 offset;
         #endregion
-
-        private void LateUpdate()
+        
+        void LateUpdate ()
         {
             this.transform.position = thePlayer.position + offset;
-
         }
     }
 }

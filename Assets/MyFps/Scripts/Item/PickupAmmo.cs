@@ -8,10 +8,11 @@ namespace MyFps
         [SerializeField] private int giveAmount = 7;
         #endregion
 
-        protected override bool OnPickUp()
+        protected override bool OnPickup()
         {
-            //탄환 지급
+            //탄환 7개 지급
             PlayerStats.Instance.AddAmmo(giveAmount);
+
             return true;
         }
     }

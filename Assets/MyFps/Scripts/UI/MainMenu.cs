@@ -1,126 +1,157 @@
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 namespace MyFps
 {
     public class MainMenu : MonoBehaviour
     {
         #region Variables
-        [SerializeField] string loadtoScene = "MainScene01";
         public SceneFader fader;
+        [SerializeField] private string loadToScene = "MainScene01";
 
         private AudioManager audioManager;
 
-        //SetActive활성화/비활성화를 위한 GameObject
         public GameObject mainMenuUI;
         public GameObject optionUI;
         public GameObject creditUI;
+        public GameObject loadGameButton;
 
         //Audio
         public AudioMixer audioMixer;
         public Slider bgmSlider;
         public Slider sfxSlider;
-        #endregion
 
-        private void Awake()
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        //저장되어 있는 씬번호
+        //private int sceneNumber;
+        #endregion
 
         private void Start()
         {
-            LoadOptions();
+            //게임 데이터 초기화
+            InitGameData();
+            //저장된 씬이 있으면
+            if (PlayerStats.Instance.SceneNumber > 0)
+            {
+                loadGameButton.SetActive(true);
+            }
 
+            //씬 페이드인 효과
             fader.FromFade();
+
             //참조
             audioManager = AudioManager.Instance;
 
-            //BGM 플레이
-            audioManager.PlayBGM("MenuBGM");
+            //Bgm 플레이
+            audioManager.PlayBgm("MenuBgm");
+        }
+
+        private void InitGameData()
+        {
+            //게임설정값: 저장된 옵션값 불러오기
+            LoadOptions();
+
+            //게임 플레이 데이터 로드
+            PlayData playData = SaveLoad.LoadData();
+            PlayerStats.Instance.PlayerStatInit(playData);
         }
 
         public void NewGame()
         {
+            //게임 데이터 초기화
+            PlayerStats.Instance.PlayerStatInit(null);
+            SaveLoad.ResetData();
             audioManager.Stop(audioManager.BgmSound);
             audioManager.Play("MenuButton");
-            fader.FadeTo(loadtoScene);
+
+            fader.FadeTo(loadToScene);
         }
 
         public void LoadGame()
         {
-            Debug.Log("Load Game");
+            //Debug.Log($"Goto LoadGame {sceneNumber}번 씬");
+            audioManager.Stop(audioManager.BgmSound);
+            audioManager.Play("MenuButton");
+
+            fader.FadeTo(PlayerStats.Instance.SceneNumber);
         }
 
         public void Options()
         {
-            audioManager.PlayBGM("PlayBGM");
+            audioManager.Play("MenuButton");
+
             ShowOptions();
         }
 
         public void Credits()
         {
             ShowCredit();
-            Debug.Log("Credits");
         }
 
         public void QuitGame()
         {
+            //Cheating
+            PlayerPrefs.DeleteAll();
+
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+        Application.Quit(); // 어플리케이션 종료
 #endif
         }
 
         private void ShowOptions()
         {
             audioManager.Play("MenuButton");
+
             mainMenuUI.SetActive(false);
             optionUI.SetActive(true);
         }
 
-        public void OptionExit()
+        public void HideOptions()
         {
-            //옵션창을 나갈때 값을 저장
+            //옵션값 저장하기
             SaveOptions();
 
             optionUI.SetActive(false);
             mainMenuUI.SetActive(true);
         }
 
-        //AudioMixer BGM -40~0 세팅
-        public void SetBGMVolume(float value)
+        //AudioMixer Bgm -40~0
+        public void SetBgmVolume(float value)
         {
             audioMixer.SetFloat("BgmVolume", value);
-            Debug.Log(value);
-
         }
 
-        //AudioMixer BGM -40~0 세팅
-        public void SetSFXVolume(float value)
+        //AudioMixer Sfx -40~0
+        public void SetSfxVolume(float value)
         {
             audioMixer.SetFloat("SfxVolume", value);
         }
 
         //옵션값 저장하기
-        public void SaveOptions()
+        private void SaveOptions()
         {
-            PlayerPrefs.SetFloat("BgmVolume",bgmSlider.value);
-            PlayerPrefs.SetFloat("SfxVolume",sfxSlider.value);
+            PlayerPrefs.SetFloat("BgmVolume", bgmSlider.value);
+            PlayerPrefs.SetFloat("SfxVolume", sfxSlider.value);
         }
 
         //옵션값 로드하기
         private void LoadOptions()
         {
+            //배경음 볼륨
             float bgmVolume = PlayerPrefs.GetFloat("BgmVolume", 0);
-            SetBGMVolume(bgmVolume);        //사운드 볼륨 조절
-            bgmSlider.value = bgmVolume;    //UI 세팅
+            //Debug.Log($"bgmVolume: {bgmVolume}");
+            SetBgmVolume(bgmVolume);        //사운드 볼륨 조절
+            bgmSlider.value = bgmVolume;    //UI 셋팅
 
+            //효과음 볼륨
             float sfxVolume = PlayerPrefs.GetFloat("SfxVolume", 0);
-            SetSFXVolume(sfxVolume);        //사운드 볼륨 조절
-            sfxSlider.value = sfxVolume;    //UI 세팅
+            //Debug.Log($"sfxVolume: {sfxVolume}");
+            SetSfxVolume(sfxVolume);        //사운드 볼륨 조절
+            sfxSlider.value = sfxVolume;    //UI 셋팅
+
+            //기타...
         }
 
         private void ShowCredit()
@@ -128,6 +159,5 @@ namespace MyFps
             mainMenuUI.SetActive(false);
             creditUI.SetActive(true);
         }
-
     }
 }

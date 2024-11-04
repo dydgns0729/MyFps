@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyFps
@@ -6,31 +8,29 @@ namespace MyFps
     {
         #region Variables
         public Transform gunMan;
-
-        //private Enemy enemy;
-
-        public GameObject enemyZoneIn;
+        public GameObject enemyZoneIn; // In 트리거
         #endregion
 
         private void OnTriggerEnter(Collider other)
         {
-            this.gameObject.SetActive(false);
-            if (gunMan == null) return;
-
-            //건맨 추격 시작 
+            //건맨 GoBack
             if (other.tag == "Player")
             {
-                gunMan.GetComponent<Enemy>().GoStartPosition();
-                enemyZoneIn.SetActive(true);
+                if (gunMan != null)
+                {
+                    gunMan.GetComponent<Enemy>().GoStartPostion();
+                }   
             }
-
         }
 
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    //In 트리거 활성화 
-        //    this.gameObject.SetActive(false);
-        //    enemyZoneIn.SetActive(true);
-        //}
+        private void OnTriggerExit(Collider other)
+        {
+            //In 트리거 활성화
+            if (other.tag == "Player")
+            {
+                this.gameObject.SetActive(false);
+                enemyZoneIn.SetActive(true);
+            }
+        }
     }
 }

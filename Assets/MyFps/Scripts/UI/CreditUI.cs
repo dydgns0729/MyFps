@@ -18,8 +18,8 @@ namespace MyFps
 
         private void HideCredits()
         {
-            this.gameObject.SetActive(false);
             mainMenu.SetActive(true);
+            this.gameObject.SetActive(false);
         }
     }
 }

@@ -1,8 +1,8 @@
-using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using StarterAssets;
 
 namespace MyFps
 {
@@ -14,6 +14,8 @@ namespace MyFps
         public GameObject thePlayer;
         public TextMeshProUGUI textBox;
         #endregion
+
+        // Start is called before the first frame update
         void Start()
         {
             //마우스 커서 상태 설정
@@ -25,24 +27,21 @@ namespace MyFps
 
         IEnumerator SequencePlay()
         {
-            //플레이어 움직임 비활성화
+            //플레이어 비활성화
             thePlayer.GetComponent<FirstPersonController>().enabled = false;
+
             //배경음 시작
-            AudioManager.Instance.PlayBGM("PlayBGM");
+            AudioManager.Instance.PlayBgm("PlayBgm");
             //시퀀스 텍스트 초기화
-            textBox.gameObject.SetActive(true);
             textBox.text = "";
 
             //1초후 페이드인 효과 시작
             yield return new WaitForSeconds(1f);
             fader.FromFade();
 
-            //플레이어 움직임 활성화
+            //플레이어 활성화
             yield return new WaitForSeconds(1f);
-            textBox.gameObject.SetActive(false);
             thePlayer.GetComponent<FirstPersonController>().enabled = true;
-
         }
-
     }
 }

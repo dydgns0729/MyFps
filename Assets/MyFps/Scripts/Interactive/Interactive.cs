@@ -1,32 +1,34 @@
 using TMPro;
 using UnityEngine;
+
 namespace MyFps
 {
-    //인터렉티브 액션 구현하는 추상클래스
+    //인터렉티브 액션을 구현하는 클래스
     public abstract class Interactive : MonoBehaviour
     {
         protected abstract void DoAction();
 
         #region Variables
-        //ActionUI
+        private float theDistance;
+
+        //action UI
         public GameObject actionUI;
-        public TextMeshProUGUI actionTextUI;
+        public TextMeshProUGUI actionText;
+        [SerializeField] private string action = "Action Text";
         public GameObject extraCross;
-        [SerializeField] protected string action = "Input Message";
 
-        protected float theDistance;
-
-        //true면 인터렉티브 비활성화
+        //true이면 Interactive 기능을 정지
         protected bool unInteractive = false;
         #endregion
 
-        protected void Update()
+        private void Update()
         {
             theDistance = PlayerCasting.distanceFromTarget;
         }
 
         private void OnMouseOver()
         {
+            //거리가 2이하 일때
             if (theDistance <= 2f && !unInteractive)
             {
                 ShowActionUI();
@@ -35,7 +37,7 @@ namespace MyFps
                 {
                     HideActionUI();
 
-                    //픽업시 화살표 비활성화, 피스톨 활성화, 트리거 비활성화를 위한 Destroy
+                    //Action
                     DoAction();
                 }
             }
@@ -45,24 +47,23 @@ namespace MyFps
             }
         }
 
-        //마우스가 벗어나면 액션 UI를 숨긴다
         private void OnMouseExit()
         {
             HideActionUI();
         }
 
+        void ShowActionUI()
+        {
+            actionUI.SetActive(true);
+            actionText.text = action;
+            extraCross.SetActive(true);
+        }
+
         void HideActionUI()
         {
             actionUI.SetActive(false);
-            actionTextUI.text = "";
+            actionText.text = "";
             extraCross.SetActive(false);
-        }
-
-        void ShowActionUI()
-        {
-            actionTextUI.text = action;
-            actionUI.SetActive(true);
-            extraCross.SetActive(true);
         }
     }
 }

@@ -8,7 +8,9 @@ namespace MyFps
         #region Variables
         public TextMeshProUGUI ammoCount;
         #endregion
-        private void Update()
+
+        // Update is called once per frame
+        void Update()
         {
             ammoCount.text = PlayerStats.Instance.AmmoCount.ToString();
         }

@@ -6,30 +6,27 @@ namespace MyFps
     {
         #region Variables
         public SceneFader fader;
-
-        [SerializeField] private string loadToScene = "PlayScene";
+        [SerializeField] private string loadToScene = "MainMenu";
         #endregion
+
         private void Start()
         {
             //마우스 커서 상태 설정
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
             //페이드인 효과
             fader.FromFade();
         }
 
         public void Retry()
         {
-            //마우스 커서 상태 설정
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-            fader.FadeTo(loadToScene);
+            fader.FadeTo(PlayerStats.Instance.NowSceneNumber);
         }
 
         public void Menu()
         {
-            Debug.Log("Go to Menu");
+            fader.FadeTo(loadToScene);
         }
-
     }
 }

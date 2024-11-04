@@ -1,5 +1,6 @@
 using UnityEngine;
 using StarterAssets;
+using UnityEngine.SceneManagement;
 
 namespace MyFps
 {
@@ -7,40 +8,47 @@ namespace MyFps
     {
         #region Variables
         public GameObject pauseUI;
-        private GameObject thePlayer;
 
         public SceneFader fader;
         [SerializeField] private string loadToScene = "MainMenu";
+
+        private GameObject thePlayer;
         #endregion
-        private void Awake()
+
+        private void Start()
         {
             //참조
             thePlayer = GameObject.Find("Player");
         }
-        void Update()
+
+        private void Update()
         {
+            //
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Toggle();
             }
         }
+
         public void Toggle()
         {
-
             pauseUI.SetActive(!pauseUI.activeSelf);
-            if (pauseUI.activeSelf) //pause 창이 오픈 될때
+
+            if (pauseUI.activeSelf) //pause 창이 오픈 될때, 사운드? && !isSequence
             {
+                thePlayer.GetComponent<FirstPersonController>().enabled = false;
+                
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
-                thePlayer.GetComponent<FirstPersonController>().enabled = false;
 
                 Time.timeScale = 0f;
             }
-            else                    //pause 창이 닫힐때
+            else //pause 창이 클로즈 될때
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = false;
                 thePlayer.GetComponent<FirstPersonController>().enabled = true;
+
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
 
                 Time.timeScale = 1f;
             }
@@ -50,13 +58,13 @@ namespace MyFps
         {
             Time.timeScale = 1f;
 
-            //씬 종료 처리
-            AudioManager.Instance.StopBGM();
+            //씬 종료 처리 ...
+            if (SceneManager.GetActiveScene().buildIndex!=3)
+            {
+                AudioManager.Instance.StopBgm();
+            }
 
-            //메인메뉴로 이동
             fader.FadeTo(loadToScene);
-
-            //Debug.Log("Goto Menu");
         }
     }
 }

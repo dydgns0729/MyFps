@@ -3,7 +3,7 @@ using UnityEngine;
 namespace MyFps
 {
     //AmmoBox 아이템 획득
-    public class PickUpAmmoBox : Interactive
+    public class PickupAmmoBox : Interactive
     {
         #region Variables
         //AmmoBox 아이템 획득시 지급하는 ammo 갯수
@@ -12,7 +12,8 @@ namespace MyFps
 
         protected override void DoAction()
         {
-            //탄환 7개 지급
+            //아이템 지급
+            //Debug.Log("탄환 7개를 지급 했습니다");
             PlayerStats.Instance.AddAmmo(giveAmmo);
 
             //킬

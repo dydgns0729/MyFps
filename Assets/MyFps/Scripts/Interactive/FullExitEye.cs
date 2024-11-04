@@ -1,91 +1,66 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 
-namespace MyFps {
-    public class FullExitEye :Interactive
+namespace MyFps
+{
+    public class FullExitEye : Interactive
     {
         #region Variables
-        public TextMeshProUGUI textBox;
-        [SerializeField] private string rightSequence = "You need the RightEye";
-        [SerializeField] private string leftSequence = "You need the LeftEye";
-        [SerializeField] private string allSequence = "You need the Left and Right Eye";
+        public GameObject emptyPicture;
+        public GameObject fullPicture;
 
-        public GameObject leftEye;
-        public GameObject rightEye;
-
-        public GameObject exitWall;
+        public Animator exitWallAnimator;
         public GameObject exitTrigger;
+
+        public TextMeshProUGUI textBox;
+        [SerializeField] private string puzzleStr = "You need more Eye Pictures";
         #endregion
-
-        IEnumerator NotEnoughPuzzle()
-        {
-            unInteractive = true;
-
-            textBox.gameObject.SetActive(true);
-            
-
-            yield return new WaitForSeconds(2f);
-            unInteractive = false;
-            textBox.gameObject.SetActive(false);
-            textBox.text = "";
-        }
-
 
         protected override void DoAction()
         {
-            if (!CheckPuzzle())
+            //퍼즐 조각을 모두 모았느냐?
+            if (PlayerStats.Instance.HasPuzzleItem(PuzzleKey.LEFTEYE_KEY)
+                && PlayerStats.Instance.HasPuzzleItem(PuzzleKey.RIGHTEYE_KEY))
             {
-                StartCoroutine(NotEnoughPuzzle());
+                //출구 열기
+                StartCoroutine(OpenExitWall());
             }
             else
             {
-                StartCoroutine(OpenExitWall());
+                //메세지 출력
+                StartCoroutine(LockedExitWall());
             }
         }
 
         IEnumerator OpenExitWall()
         {
-            //출구를 열고 출구 콜라이더 제거
-            exitWall.GetComponent<Animator>().SetBool("IsOpen",true);
-            //exitWall.GetComponent<BoxCollider>().enabled = false;
-            unInteractive = true;
-            
-            yield return new WaitForSeconds(0.5f);
-            //exit 트리거 활성화
+            //완성본 그림 보이기
+            emptyPicture.SetActive(false);
+            fullPicture.SetActive(true);
 
+            //출구 열리기
+            exitWallAnimator.SetBool("IsOpen", true);
+            yield return new WaitForSeconds(0.5f);
+
+            //exit 트리거 활성화
             exitTrigger.SetActive(true);
         }
 
-        private bool CheckPuzzle()
+        IEnumerator LockedExitWall()
         {
-            bool hasLeftEye = PlayerStats.Instance.HasPuzzleItem(PuzzleKey.LEFTEYE_KEY);
-            bool hasRightEye = PlayerStats.Instance.HasPuzzleItem(PuzzleKey.RIGHTEYE_KEY);
+            unInteractive = true;   //인터랙티브 기능 정지
 
-            if (!hasLeftEye && !hasRightEye)
-            {
-                textBox.text = allSequence;
-                return false;
-            }
-            else if (!hasLeftEye && hasRightEye)
-            {
-                textBox.text = leftSequence;
-                rightEye.SetActive(true);
-                return false;
-            }
-            else if (hasLeftEye && !hasRightEye)
-            {
-                textBox.text = rightSequence;
-                leftEye.SetActive(true);
-                return false;
-            }
+            textBox.gameObject.SetActive(true);
+            textBox.text = puzzleStr;
 
-            rightEye.SetActive(true);
-            leftEye.SetActive(true);
-            return true;
+            yield return new WaitForSeconds(2f);
+
+            textBox.text = "";
+            textBox.gameObject.SetActive(false);
+
+            unInteractive = false;   //인터랙티브 기능 복원
         }
     }
 }

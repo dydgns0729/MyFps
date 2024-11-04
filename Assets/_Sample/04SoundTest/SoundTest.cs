@@ -4,30 +4,30 @@ namespace MySample
 {
     public class SoundTest : MonoBehaviour
     {
-
         #region Variables
         private AudioSource audioSource;
-        public AudioClip clip;              //재생할 오디오 클립
 
-        [SerializeField] private float volume = 1.0f;       //볼륨
-        [SerializeField] private float pitch = 1.0f;        //재생속도
-        [SerializeField] private bool loop = false;         //반복여부
-        //[SerializeField] private bool playOnAwake = false;  //시작시 바로 재생하는지 여부확인
+        public AudioClip clip;         //재생할 오디오 클립
 
+        [SerializeField] private float volume = 1.0f;
+        [SerializeField] private float pitch = 1.0f;
+        [SerializeField] private bool loop = false;
+        //[SerializeField] private bool playOnAwake = false;
         #endregion
 
-        private void Start()
+        // Start is called before the first frame update
+        void Start()
         {
             audioSource = GetComponent<AudioSource>();
-            SoundPlay();
+            SoundOnShot();
         }
 
         void SoundPlay()
         {
             audioSource.clip = clip;
+            audioSource.volume = volume;
             audioSource.pitch = pitch;
             audioSource.loop = loop;
-            audioSource.volume = volume;
 
             audioSource.Play();
         }
@@ -36,5 +36,6 @@ namespace MySample
         {
             audioSource.PlayOneShot(clip);
         }
+
     }
 }
